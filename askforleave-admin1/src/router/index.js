@@ -6,6 +6,7 @@ import modify from '../components/modify.vue'
 import home from '../components/home.vue'
 import handle from '../components/handle.vue'
 import approved from '../components/approved.vue'
+import apply from '../components/apply.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,7 @@ const routes = [
     { path: '/login', component: login },
     { path: '/forget', component: forget },
     { path: '/modify', component: modify },
+    { path: '/apply', component: apply },
     {
         path: '/home',
         component: home,
