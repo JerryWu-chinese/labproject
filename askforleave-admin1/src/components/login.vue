@@ -7,7 +7,8 @@
 		<div class="zhuhai">
 			<span>密码：</span>
 			<input type="password" v-model="password">
-			<router-link to="forget" class="forget">忘记密码</router-link>
+			<!-- <router-link to="forget" class="forget">忘记密码</router-link> -->
+            <router-link to="" class="forget">忘记密码</router-link>
 		</div>
 		<router-link :to="{path:to}" tag="button" class="dongguan" @click.native="denglu">登录</router-link>
     </div>
