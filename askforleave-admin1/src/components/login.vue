@@ -10,7 +10,8 @@
 			<!-- <router-link to="forget" class="forget">忘记密码</router-link> -->
             <router-link to="" class="forget">忘记密码</router-link>
 		</div>
-		<router-link :to="{path:to}" tag="button" class="dongguan" @click.native="denglu">登录</router-link>
+		<!-- <router-link :to="{path:to}" tag="button" class="dongguan" @click.native="denglu">登录</router-link> -->
+        <button class="dongguan" @click="denglu">登录</button>
     </div>
   </div>
 </template>
@@ -37,8 +38,9 @@ export default {
                 if(value.data.code === 200)
                 {
                     //console.log("成功");
-                    this.to = 'apply';
-                    document.querySelector('.dongguan').click();
+                    //this.to = 'apply';
+                    //document.querySelector('.dongguan').click();
+                    this.$router.push('/apply')
                     sessionStorage.setItem('componentId', 'handle');
                     this.$store.state.componentId = sessionStorage.getItem('componentId');
                 }

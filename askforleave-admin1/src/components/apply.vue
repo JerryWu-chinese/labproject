@@ -18,11 +18,11 @@
             <button class="guangan" @click="hide">X</button>
             <div class="yibin">
                 <div>请假类型：</div>
-                <div>事假：<input type="radio" name="jia" :checked='this.$store.state.type1'>√</div>
-                <div>病假：<input type="radio" name="jia" :checked='this.$store.state.type2'>√</div>
-                <div>其他（请说明）：<input type="text" v-model="this.$store.state.reason"></div>
-                <div>请假时间：<input type="text" v-model="this.$store.state.apply_time"></div>
-                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" v-text="this.$store.state.veto_reason"></textarea></div>
+                <div>事假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type1'>√</div>
+                <div>病假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type2'>√</div>
+                <div>其他（请说明）：<input type="text" disabled="disabled" v-model="this.$store.state.reason"></div>
+                <div>请假时间：<input type="text" disabled="disabled" v-model="this.$store.state.apply_time"></div>
+                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" textarea v-text="this.$store.state.veto_reason"></textarea></div>
                 <div>
                     <button class="yibin_01" @click="yuanyin">否决</button>
                     <button class="yibin_02" @click="hide(), agree()">同意</button>
@@ -38,11 +38,11 @@
             <button class="guangan" @click="yincang">X</button>
             <div class="yibin">
                 <div>请假类型：</div>
-                <div>事假：<input type="radio" name="jia" :checked='this.$store.state.type3'>√</div>
-                <div>病假：<input type="radio" name="jia" :checked='this.$store.state.type4'>√</div>
-                <div>其他（请说明）：<input type="text" v-model="this.$store.state.reason2"></div>
-                <div>请假时间：<input type="text" v-model="this.$store.state.apply_time2"></div>
-                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" v-text="this.$store.state.veto_reason2"></textarea></div>
+                <div>事假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type3'>√</div>
+                <div>病假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type4'>√</div>
+                <div>其他（请说明）：<input type="text" disabled="disabled" v-model="this.$store.state.reason2"></div>
+                <div>请假时间：<input type="text" disabled="disabled" v-model="this.$store.state.apply_time2"></div>
+                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" v-text="this.$store.state.veto_reason2"></textarea></div>
                 <div>
                     <button class="yibin_01" @click="chacha03()">否决</button>
                     <button class="yibin_02" @click="yincang(), agree2()">同意</button>
@@ -97,7 +97,7 @@ export default {
             sessionStorage.setItem('componentId', 'approved');
             this.$store.state.componentId = sessionStorage.getItem('componentId');
             //this.$store.state.componentId = "approved";
-            document.querySelector('.sihai').click();
+            //document.querySelector('.sihai').click();
         },
         hide() {
             this.yarn = this.yarn === 'none' ? 'block' : 'none';
