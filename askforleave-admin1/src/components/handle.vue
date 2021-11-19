@@ -1,23 +1,24 @@
 <template>
   <el-table class="huaxia"
     :data="tableData"
-    style="width: 100%"
-    max-height="500">
+    min-width="1516"
+    :max-height="maxHeight"
+    style="width: 100%">
     <el-table-column
       prop="name"
       label="姓名"
-      width="170">
+      width="300">
     </el-table-column>
     <el-table-column
       prop="account"
       label="学号"
-      width="190">
+      width="350">
     </el-table-column>
     <el-table-column
       fixed
       prop="create_at"
       label="申请时间"
-      width="170">
+      width="200">
     </el-table-column>
     <el-table-column
       prop="type"
@@ -27,7 +28,7 @@
     <el-table-column
       fixed="right"
       label="操作"
-      width="120">
+      width="200">
       <template slot-scope="scope">
         <el-button
           @click.native.prevent="deleteRow(scope.$index, tableData)"
@@ -90,18 +91,45 @@
     },
     data() {
       return {
-          tableData: []
+          tableData: [],
+          maxHeight: '822'
       }
+    },
+    watch: {
+        screenWidth(val){
+            // 为了避免频繁触发resize函数导致页面卡顿，使用定时器
+            if(!this.timer){
+                // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
+                this.maxHeight = val
+                this.timer = true
+                let that = this
+                setTimeout(function(){
+                    // 打印screenWidth变化的值
+                    console.log(that.maxHeight)
+                    that.timer = false
+                },400)
+            }
+        }
+    },
+    mounted () {undefined
+        const that = this
+        window.addEventListener('resize', function(e) {
+            //this.maxHeight = document.querySelector('.sihai').offsetHeight;
+            //console.log(document.querySelector('.sihai').offsetHeight);
+            window.screenWidth = document.querySelector('.sihai').offsetHeight
+            that.maxHeight = window.screenWidth
+        })
     }
   }
 </script>
 
 <style scoped>
     .huaxia {
-        position: absolute;
+        /*position: absolute;
         top: 275px;
         right: 340px;
         width: 50%!important;
-        border: 1px solid #000;
+        border: 1px solid #000;*/
+        height: 100%;
     }
 </style>

@@ -28,7 +28,7 @@ export default new Vuex.Store({
         teacher: '',
         status1: -1,
         status2: -1,
-        tableData2: [],
+        tableData2: []
     },
     mutations: {
         

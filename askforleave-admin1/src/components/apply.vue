@@ -6,9 +6,9 @@
             <div :style="{backgroundColor: bgcc, color: colorc}" @click="changeOne">处理申请</div>
             <div :style="{backgroundColor: bgc, color: color}" @click="changeTwo" class="taiwan">已审批申请</div>
         </div>
-        <div class="jiangnan">{{title}}</div>
+        <!-- <div class="jiangnan">{{title}}</div> -->
         <!--<handle @fhide="hide"></handle>-->
-        <component :is="this.$store.state.componentId" @fhide="hide" @fyincang="yincang"></component>
+        <div class="sihai"><component :is="this.$store.state.componentId" @fhide="hide" @fyincang="yincang"></component></div>
         <div class="xinan" :style="{display: yarn}"></div>
         <div class="sichuan" :style="{display: yarn}">
             <div class="chengdu">
@@ -20,9 +20,9 @@
                 <div>请假类型：</div>
                 <div>事假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type1'>√</div>
                 <div>病假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type2'>√</div>
-                <div>其他（请说明）：<input type="text" disabled="disabled" v-model="this.$store.state.reason"></div>
+                <div>其他（请说明）：<input type="text" disabled="disabled"></div>
                 <div>请假时间：<input type="text" disabled="disabled" v-model="this.$store.state.apply_time"></div>
-                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" textarea v-text="this.$store.state.veto_reason"></textarea></div>
+                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" textarea v-text="this.$store.state.reason"></textarea></div>
                 <div>
                     <button class="yibin_01" @click="yuanyin">否决</button>
                     <button class="yibin_02" @click="hide(), agree()">同意</button>
@@ -40,9 +40,9 @@
                 <div>请假类型：</div>
                 <div>事假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type3'>√</div>
                 <div>病假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type4'>√</div>
-                <div>其他（请说明）：<input type="text" disabled="disabled" v-model="this.$store.state.reason2"></div>
+                <div>其他（请说明）：<input type="text" disabled="disabled"></div>
                 <div>请假时间：<input type="text" disabled="disabled" v-model="this.$store.state.apply_time2"></div>
-                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" v-text="this.$store.state.veto_reason2"></textarea></div>
+                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" v-text="this.$store.state.reason2"></textarea></div>
                 <div>
                     <button class="yibin_01" @click="chacha03()">否决</button>
                     <button class="yibin_02" @click="yincang(), agree2()">同意</button>
@@ -135,8 +135,30 @@ export default {
             this.xianshi02 = !this.xianshi02;
         },
         chacha03() {
-            this.sha = this.sha === 'none' ? 'block' : 'none';
-            this.xianshi02 = this.xianshi02 === true ? false : true;
+            if(this.$store.state.id2>-1 && this.$store.state.status1!=-1 && this.$store.state.status2!=-1)
+            {
+                this.$axios.post("/api/admin/examine_staus", {
+                    id:this.$store.state.id2,
+                    status1:1,
+                    status2:this.$store.state.status2
+                }, {}).then(value => {
+                    if(value.data.code==200)
+                    {
+                        this.sha = this.sha === 'none' ? 'block' : 'none';
+                        this.xianshi02 = this.xianshi02 === true ? false : true;
+                    }
+                    else
+                    {
+                        if(value.data.msg == "操作失败,只能修改一次")
+                        {
+                            alert("只能修改一次哦。");
+                        }
+                        //console.log(value.data);
+                    }
+                }, reason => {
+                    console.log(reason);
+                })
+            }
         },
         //修改请假状态为——通过
         agree2() {
@@ -194,6 +216,8 @@ export default {
 <style scoped>
     .huaxia {
         height: 100%;
+        overflow: hidden;
+        /*overflow-y: scroll;*/
     }
     .hongkong {
         float: right;
@@ -203,13 +227,20 @@ export default {
         margin-right: 20px;
         background-color: 	#C0C0C0;
         border-radius: 5px;
+        /* overflow: hidden; */
     }
     .xibei {
         display: inline-block;
-        width: 300px;
+        /*width: 300px;*/
+        width: 15%;
         height: 88%;
+        /*width: 2.88rem;
+        height: 8.24rem;*/
         background-color: 	#F5F5F5;
         border-right: 1px solid #000;
+        overflow: hidden;
+        
+     
     }
     .xibei div {
         width: 100%;
@@ -222,6 +253,47 @@ export default {
     }
     .xibei div:first-child {
         border-top: 1px solid #000;
+    }
+    .sihai {
+        /*position: absolute;
+        top: 275px;
+        right: 340px;
+        width: 960px;
+        height: 500px;*/
+        display: inline-block;
+        width: 79%;
+        height: 88%;
+        
+    }
+    @media screen and (max-width: 1670px) {
+        .xibei div {
+            font-size: 26px;
+        }
+        .sihai {
+            display: inline-block;
+            width: 69%;
+            height: 88%;
+        }
+    }
+    @media screen and (max-width: 935px) {
+        .xibei div {
+            font-size: 20px;
+        }
+    }
+    @media screen and (max-width: 710px) {
+        .xibei div {
+            font-size: 18px;
+        }
+    }
+    @media screen and (max-width: 630px) {
+        .xibei div {
+            font-size: 14px;
+        }
+        .sihai {
+            display: inline-block;
+            width: 65%;
+            height: 88%;
+        }
     }
     .jiangnan {
         float: right;
@@ -338,6 +410,7 @@ export default {
         height: 40px;
         border-radius: 5px;
         background-color: 	#FFDEAD;
+        z-index: 10000;
     }
     .sichuan .yibin .yibin_02 {
         position: absolute;
@@ -348,5 +421,27 @@ export default {
         border-radius: 5px;
         background-color: 		#228B22;
         opacity: .7;
+    }
+    @media screen and (max-width: 1271px) {
+        .sichuan {
+            top: 140px;
+            left: 100px;
+            right: 0;
+            bottom: 0;
+            width: 800px;
+            height: 500px;
+        }
+        .chengdu {
+            height: 15%;
+        }
+        .sichuan .yibin .yibin_01 {
+            left: 300px;
+        }
+        .sichuan .yibin .yibin_02 {
+            right: 300px;
+        }
+        .sichuan .yibin div {
+            height: 7%;
+        }
     }
 </style>

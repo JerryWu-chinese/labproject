@@ -1,29 +1,30 @@
 <template>
   <el-table class="huaxia"
     :data="tableData2"
+    min-width="1516"
+    :max-height="maxHeight"
     border
-    style="width: 50%"
-    max-height="500">
+    style="width: 100%">
     <el-table-column
       fixed
       prop="name"
       label="姓名"
-      width="150">
+      width="170">
     </el-table-column>
     <el-table-column
       prop="account"
       label="学号"
-      width="120">
+      width="220">
     </el-table-column>
     <el-table-column
       prop="create_at"
       label="申请时间"
-      width="120">
+      width="250">
     </el-table-column>
     <el-table-column
       prop="type"
       label="请假类型"
-      width="120">
+      width="150">
     </el-table-column>
     <el-table-column
       prop="status1"
@@ -33,12 +34,12 @@
     <el-table-column
       prop="veto_reason"
       label="备注"
-      width="170">
+      width="250">
     </el-table-column>
     <el-table-column
       fixed="right"
       label="操作"
-      width="100">
+      width="170">
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row), xiugai(scope.row)" type="text" size="small">修改</el-button>
         <el-button @click="del(scope.row)" type="text" size="small">删除</el-button>
@@ -138,18 +139,52 @@ export default {
     },
     data() {
       return {
-        tableData2: []
+        tableData2: [],
+        maxHeight: '800'
       }
+    },
+    watch: {
+        screenWidth(val){
+            // 为了避免频繁触发resize函数导致页面卡顿，使用定时器
+            if(!this.timer){
+                // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
+                this.maxHeight = val
+                this.timer = true
+                let that = this
+                setTimeout(function(){
+                    // 打印screenWidth变化的值
+                    console.log(that.maxHeight)
+                    that.timer = false
+                },400)
+            }
+        }
+    },
+    mounted () {undefined
+        const that = this
+        window.addEventListener('resize', function(e) {
+            //this.maxHeight = document.querySelector('.sihai').offsetHeight;
+            //console.log(document.querySelector('.sihai').offsetHeight);
+            window.screenWidth = document.querySelector('.sihai').offsetHeight
+            that.maxHeight = window.screenWidth
+        })
     }
 }
 </script>
 
 <style scoped>
     .huaxia {
-        position: absolute;
+        /*position: absolute;
         top: 275px;
         right: 340px;
         width: 50%!important;
         border: 1px solid #000;
+        height: 100%;*/
+    }
+    .el-table .el-table__fixed {
+        height: auto!important;
+        width: 17px!important;
+    }
+    .el-table__body-wrapper {
+        z-index: 2;
     }
 </style>

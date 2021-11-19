@@ -50,6 +50,7 @@ export default {
         border: 1px solid #000;
         text-align: center;
         background-color: #fff;
+        z-index: 999;
     }
     i {
         position: absolute;
@@ -68,5 +69,20 @@ export default {
         margin-top: 3px;
         background-color: #1E90FF;
         border-radius: 5px;
+    }
+    @media screen and (max-width: 1271px) {
+        div {
+            right: 450px;
+        }
+    }
+    @media screen and (max-width: 1045px) {
+        div {
+            right: 250px;
+        }
+    }
+    @media screen and (max-width: 708px) {
+        div {
+            right: 150px;
+        }
     }
 </style>
