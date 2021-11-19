@@ -105,7 +105,7 @@
                 let that = this
                 setTimeout(function(){
                     // 打印screenWidth变化的值
-                    console.log(that.maxHeight)
+                    //console.log(that.maxHeight)
                     that.timer = false
                 },400)
             }
