@@ -6,7 +6,7 @@
       class="tableBox"
       :data="tableData"
       :row-style="{height:60+'px'}"
-      :cell-style="{height:60+'px',textAlign: 'center'}"
+      :cell-style="{textAlign: 'center'}"
       :header-cell-style="{height:60+'px',textAlign: 'center'}"
       style="width: 100%;">
       <el-table-column
@@ -98,5 +98,5 @@
 </script>
 
 <style scoped>
-
+  
 </style>

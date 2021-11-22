@@ -45,11 +45,6 @@ export default {
             sessionStorage.clear();
         }
     },
-    watch: {
-        "$router.path": function(newValue, oldValue) {
-            console.log(newValue, oldValue);
-        }
-    },
     created: function () {
         if(sessionStorage.getItem('componentId') == null)
         {

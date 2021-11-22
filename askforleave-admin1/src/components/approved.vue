@@ -2,7 +2,7 @@
   <el-table class="huaxia"
     :data="tableData"
     :row-style="{height:60+'px'}"
-    :cell-style="{height:60+'px',textAlign: 'center'}"
+    :cell-style="{textAlign: 'center'}"
     :header-cell-style="{height:60+'px',textAlign: 'center'}"
     border
     style="width: 100%">
