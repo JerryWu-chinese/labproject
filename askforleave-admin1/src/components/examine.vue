@@ -301,6 +301,9 @@ export default {
     .dongnan .lingnan {
         margin: .3rem auto 0;
     }
+    .dongnan .lingnan2 div:nth-child(5) {
+        width: 35%;
+    }
     .dongnan .jiangnan2 {
         width: 10rem;
         height: 8.5rem;
