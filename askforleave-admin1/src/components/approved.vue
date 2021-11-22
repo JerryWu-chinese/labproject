@@ -134,6 +134,8 @@ export default {
 }
 </script>
 
-<style scoped>
-    
+<style scoped lang="less">
+  /deep/ .cell {
+    overflow: visible!important;
+  }
 </style>
