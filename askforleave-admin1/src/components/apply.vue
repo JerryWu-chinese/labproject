@@ -1,447 +1,118 @@
 <template>
-    <div class="huaxia">
-        <heads></heads>
-        <router-link to="login" tag="button" class="hongkong" @click.native="tuichu">退出登录</router-link>
-        <div class="xibei">
-            <div :style="{backgroundColor: bgcc, color: colorc}" @click="changeOne">处理申请</div>
-            <div :style="{backgroundColor: bgc, color: color}" @click="changeTwo" class="taiwan">已审批申请</div>
-        </div>
-        <!-- <div class="jiangnan">{{title}}</div> -->
-        <!--<handle @fhide="hide"></handle>-->
-        <div class="sihai"><component :is="this.$store.state.componentId" @fhide="hide" @fyincang="yincang"></component></div>
-        <div class="xinan" :style="{display: yarn}"></div>
-        <div class="sichuan" :style="{display: yarn}">
-            <div class="chengdu">
-                <span>姓名：<i>{{this.$store.state.name}}</i></span>
-                <span>专业：<i>{{this.$store.state.class}}</i></span>
-            </div>
-            <button class="guangan" @click="hide">X</button>
-            <div class="yibin">
-                <div>请假类型：</div>
-                <div>事假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type1'>√</div>
-                <div>病假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type2'>√</div>
-                <div>其他（请说明）：<input type="text" disabled="disabled"></div>
-                <div>请假时间：<input type="text" disabled="disabled" v-model="this.$store.state.apply_time"></div>
-                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" textarea v-text="this.$store.state.reason"></textarea></div>
-                <div>
-                    <button class="yibin_01" @click="yuanyin">否决</button>
-                    <button class="yibin_02" @click="hide(), agree()">同意</button>
-                </div>
-            </div>
-        </div>
-        <div class="xinan" :style="{display: sha}"></div>
-        <div class="sichuan" :style="{display: sha}">
-            <div class="chengdu">
-                <span>姓名：<i>{{this.$store.state.name2}}</i></span>
-                <span>专业：<i>{{this.$store.state.class2}}</i></span>
-            </div>
-            <button class="guangan" @click="yincang">X</button>
-            <div class="yibin">
-                <div>请假类型：</div>
-                <div>事假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type3'>√</div>
-                <div>病假：<input type="radio" name="jia" disabled="disabled" :checked='this.$store.state.type4'>√</div>
-                <div>其他（请说明）：<input type="text" disabled="disabled"></div>
-                <div>请假时间：<input type="text" disabled="disabled" v-model="this.$store.state.apply_time2"></div>
-                <div><i style="vertical-align: top; margin-right: 30px;">具体说明:</i><textarea rows="10" cols="70" disabled="disabled" v-text="this.$store.state.reason2"></textarea></div>
-                <div>
-                    <button class="yibin_01" @click="chacha03()">否决</button>
-                    <button class="yibin_02" @click="yincang(), agree2()">同意</button>
-                </div>
-            </div>
-        </div>
-        <cause :style="{display: xianshi}" @fchacha="chacha"></cause>
-        <cause02 v-show="xianshi02" @fchacha02="chacha02"></cause02>
-    </div>
+        <el-container>
+          <el-header style="padding: 0"><heads></heads></el-header>
+          <el-container>
+              <component :is="this.$store.state.examine"></component>
+            <el-aside width="15%" style="background-color: #f5f5f7;">
+                <div class="guangdong" :class="{type: isActive}" @click="changeone">待处理</div>
+                <div class="guangxi" :class="{type: !isActive}" @click="changetwo">已处理</div>
+                <button class="xianggang" @click="quit">退出</button>
+            </el-aside>
+            <el-main style="background-color: #fff;">
+                <component :is="this.$store.state.componentId"></component>
+            </el-main>
+          </el-container>
+        </el-container>
 </template>
-
 <script>
 import heads from './heads.vue'
 import handle from './handle.vue'
 import approved from './approved.vue'
-import cause from './cause.vue'
-import cause02 from './cause02.vue'
+import examine from './examine.vue'
+import revise from './revise.vue'
+//import func from 'vue-editor-bridge'
 export default {
-    data: function() {
+    data() {
         return {
-            bgcc: '#C0C0C0',
-            colorc: '#1E90FF',
-            bgc: '#F5F5F5',
-            color: '#000',
-            title: "处理申请",
-            yarn: "none",
-            sha: "none",
-            componentId: "handle",
-            xianshi: 'none',
-            xianshi02: false
+            isActive: true
         }
     },
     methods: {
-        changeOne() {
-            this.bgcc = '#C0C0C0';
-            this.colorc = '#1E90FF';
-            this.bgc = '#F5F5F5';
-            this.color = '#000';
-            this.title = "处理申请";
-            this.xianshi02 = false;
+        changeone() {
+            //this.$store.state.istable = 'handle';
             sessionStorage.setItem('componentId', 'handle');
             this.$store.state.componentId = sessionStorage.getItem('componentId');
-            //this.$store.state.componentId = "handle";
+            this.isActive = true
         },
-        changeTwo() {
-            this.bgcc = '#F5F5F5';
-            this.colorc = '#000';
-            this.bgc = '#C0C0C0';
-            this.color = '#1E90FF';
-            this.title = "已审核申请";
-            this.xianshi = 'none';
+        changetwo() {
+            //this.$store.state.istable = 'approved';
             sessionStorage.setItem('componentId', 'approved');
             this.$store.state.componentId = sessionStorage.getItem('componentId');
-            //this.$store.state.componentId = "approved";
-            //document.querySelector('.sihai').click();
+            this.isActive = false
         },
-        hide() {
-            this.yarn = this.yarn === 'none' ? 'block' : 'none';
-        },
-        //审批请假——同意
-        agree() {
-            if(this.$store.state.id > -1)
-            {
-                this.$axios.post("/api/leave/leave_approve", {
-                    id: this.$store.state.id
-                }, {}).then(value => {
-                    if(value.data.code==200 && this.$store.state.index>-1)
-                    {
-                        this.$store.state.tableData.splice(this.$store.state.index, 1);
-                        location.reload();
-                    }
-                }, reason => {
-                    console.log(reason);
-                })
-            }
-        },
-        yincang() {
-            this.sha = this.sha === 'none' ? 'block' : 'none';
-        },
-        yuanyin() {
-            this.xianshi = this.xianshi === 'none' ? 'block' : 'none';
-            this.hide();
-            this.componentId = '';
-        },
-        chacha() {
-            this.xianshi = this.xianshi === 'none' ? 'block' : 'none';
-            this.componentId = 'handle';
-        },
-        chacha02() {
-            this.xianshi02 = !this.xianshi02;
-        },
-        chacha03() {
-            if(this.$store.state.id2>-1 && this.$store.state.status1!=-1 && this.$store.state.status2!=-1)
-            {
-                this.$axios.post("/api/admin/examine_staus", {
-                    id:this.$store.state.id2,
-                    status1:1,
-                    status2:this.$store.state.status2
-                }, {}).then(value => {
-                    if(value.data.code==200)
-                    {
-                        this.sha = this.sha === 'none' ? 'block' : 'none';
-                        this.xianshi02 = this.xianshi02 === true ? false : true;
-                    }
-                    else
-                    {
-                        if(value.data.msg == "操作失败,只能修改一次")
-                        {
-                            alert("只能修改一次哦。");
-                        }
-                        //console.log(value.data);
-                    }
-                }, reason => {
-                    console.log(reason);
-                })
-            }
-        },
-        //修改请假状态为——通过
-        agree2() {
-            if(this.$store.state.id2>-1 && this.$store.state.status1!=-1 && this.$store.state.status2!=-1)
-            {
-                this.$axios.post("/api/admin/examine_staus", {
-                    id:this.$store.state.id2,
-                    status1:1,
-                    status2:this.$store.state.status2
-                }, {}).then(value => {
-                    if(value.data.code==200)
-                    {
-                        //console.log("修改成功，同意。");
-                    }
-                    else
-                    {
-                        if(value.data.msg == "操作失败,只能修改一次")
-                        {
-                            alert("只能修改一次哦。");
-                        }
-                        //console.log(value.data);
-                    }
-                }, reason => {
-                    console.log(reason);
-                })
-            }
-        },
-        tuichu() {
-            //console.log("退出");
+        quit() {
+            this.$router.push('/login')
             sessionStorage.clear();
         }
     },
-    created: function () {
-        if(sessionStorage.getItem('componentId') == "approved")
-        {
-            this.bgcc = '#F5F5F5';
-            this.colorc = '#000';
-            this.bgc = '#C0C0C0';
-            this.color = '#1E90FF';
-            this.title = "已审核申请";
-            this.xianshi = 'none';
+    watch: {
+        "$router.path": function(newValue, oldValue) {
+            console.log(newValue, oldValue);
         }
-        this.$store.state.componentId = sessionStorage.getItem('componentId');
+    },
+    created: function () {
+        if(sessionStorage.getItem('componentId') == null)
+        {
+            this.$router.push('/login');
+        }
+        else
+        {
+            if(sessionStorage.getItem('componentId') == "approved")
+            {
+                this.isActive = false;
+            }
+            this.$store.state.componentId = sessionStorage.getItem('componentId');
+        }
     },
     components: {
         heads,
         handle,
         approved,
-        cause,
-        cause02
+        examine,
+        revise
     }
 }
 </script>
 
 <style scoped>
-    .huaxia {
+    html,body,#app,.el-container{
+        /*设置内部填充为0，几个布局元素之间没有间距*/
+        padding: 0px;
+         /*外部间距也是如此设置*/
+        margin: 0px;
+        /*统一设置高度为100%*/
         height: 100%;
-        overflow: hidden;
-        /*overflow-y: scroll;*/
     }
-    .hongkong {
-        float: right;
-        width: 80px;
-        height: 35px;
-        margin-top: 10px;
-        margin-right: 20px;
-        background-color: 	#C0C0C0;
-        border-radius: 5px;
-        /* overflow: hidden; */
-    }
-    .xibei {
-        display: inline-block;
-        /*width: 300px;*/
-        width: 15%;
-        height: 88%;
-        /*width: 2.88rem;
-        height: 8.24rem;*/
-        background-color: 	#F5F5F5;
-        border-right: 1px solid #000;
-        overflow: hidden;
-        
-     
-    }
-    .xibei div {
-        width: 100%;
-        height: 80px;
-        border-bottom: 1px solid #000;
-        font-size: 30px;
-        font-weight: 500;
+    .guangdong {
+        height: 1.3rem;
+        margin: .1rem 0;
+        background-color: gainsboro;
+        font-size: .4rem;
         text-align: center;
-        line-height: 80px;
+        line-height: 1.3rem;
+        border-radius: 1.3rem;
     }
-    .xibei div:first-child {
-        border-top: 1px solid #000;
-    }
-    .sihai {
-        /*position: absolute;
-        top: 275px;
-        right: 340px;
-        width: 960px;
-        height: 500px;*/
-        display: inline-block;
-        width: 79%;
-        height: 88%;
-        
-    }
-    @media screen and (max-width: 1670px) {
-        .xibei div {
-            font-size: 26px;
-        }
-        .sihai {
-            display: inline-block;
-            width: 69%;
-            height: 88%;
-        }
-    }
-    @media screen and (max-width: 935px) {
-        .xibei div {
-            font-size: 20px;
-        }
-    }
-    @media screen and (max-width: 710px) {
-        .xibei div {
-            font-size: 18px;
-        }
-    }
-    @media screen and (max-width: 630px) {
-        .xibei div {
-            font-size: 14px;
-        }
-        .sihai {
-            display: inline-block;
-            width: 65%;
-            height: 88%;
-        }
-    }
-    .jiangnan {
-        float: right;
-        width: 200px;
-        margin: 80px 630px 0 0;
-        font-size: 30px;
-        font-weight: 600;
+    .guangxi {
+        height: 1.3rem;
+        background-color: gainsboro;
+        font-size: .4rem;
         text-align: center;
-        background-color: 	#00FFFF;
+        line-height: 1.3rem;
+        border-radius: 1.3rem;
     }
-    .xinan {
+    .xianggang {
         position: relative;
-        top: -937px;
-        left: 0;
+        top: 3em;
         width: 100%;
-        height: 100%;
-        background: 	rgba(245,245,245,0.8);
-        z-index: 100;
-        opacity: .8;
-    }
-    .sichuan {
-        position: absolute;
-        margin: auto;
-        top: 140px;
-        left: 240px;
-        right: 0;
-        bottom: 0;
-        width: 1000px;
-        height: 600px;
-        background-color: #fff!important;
-        border: 1px solid #000;
-        z-index: 101;
-    }
-    .chengdu {
-        position: relative;
-        top: 0;
-        left: 0;
-        height: 20%;
-        padding: 0px 50px;
-        border-bottom: 1px solid #000;
-        font-size: 24px;
-        font-weight: 500;
-        line-height: 120px;
-        overflow: hidden;
-    }
-    .chengdu span:first-child {
-        float: left;
-    }
-    .chengdu span:last-child {
-        float: right;
-    }
-    .sichuan .guangan {
-        display: inline-block;
-        position: absolute;
-        margin: auto;
-        top: 15px;
-        left: 0;
-        right: 0;
-        width: 30px;
-        height: 30px;
-        color: #000;
-        font-size: 24px;
-        font-weight: 600;
+        height: 1.3rem;
+        background-color: rgba(0,0,0,0.8);
+        font-size: .4rem;
+        color: #fff;
         text-align: center;
-        line-height: 30px;
-        border-radius: 50%;
-        border: 1px solid #000;
+        line-height: 1.3rem;
+        border-radius: 1.3rem;
     }
-    .sichuan .guangan:hover {
-        background-color: 	#F5F5F5;
-    }
-    .sichuan .yibin {
-        height: 80%;
-        padding: 0 100px;
-    }
-    .sichuan .yibin input {
-        border: 1px solid #000;
-        border-radius: 3px;
-    }
-    .sichuan .yibin div {
-        height: 10%;
-        font-size: 20px;
-        border-bottom: 1px solid #000;
-    }
-    .sichuan .yibin div:first-child {
-        height: 15%;
-    }
-    .sichuan .yibin div:nth-child(1) {
-        font-size: 26px;
-
-    }
-    .sichuan .yibin div:nth-child(2) input {
-        margin: 0 10px;
-    }
-    .sichuan .yibin div:nth-child(3) input {
-        margin: 0 10px;
-    }
-    .sichuan .yibin div:nth-child(5) input {
-        width: 400px;
-        text-align: center;
-    }
-    .sichuan .yibin div:nth-child(6) {
-        height: 35%;
-        padding-top: 5px;
-    }
-    .sichuan .yibin div:last-child {
-        border: 0;
-    }
-    .sichuan .yibin .yibin_01 {
-        position: absolute;
-        bottom: 4px;
-        left: 350px;
-        width: 70px;
-        height: 40px;
-        border-radius: 5px;
-        background-color: 	#FFDEAD;
-        z-index: 10000;
-    }
-    .sichuan .yibin .yibin_02 {
-        position: absolute;
-        bottom: 4px;
-        right: 350px;
-        width: 70px;
-        height: 40px;
-        border-radius: 5px;
-        background-color: 		#228B22;
-        opacity: .7;
-    }
-    @media screen and (max-width: 1271px) {
-        .sichuan {
-            top: 140px;
-            left: 100px;
-            right: 0;
-            bottom: 0;
-            width: 800px;
-            height: 500px;
-        }
-        .chengdu {
-            height: 15%;
-        }
-        .sichuan .yibin .yibin_01 {
-            left: 300px;
-        }
-        .sichuan .yibin .yibin_02 {
-            right: 300px;
-        }
-        .sichuan .yibin div {
-            height: 7%;
-        }
+    .type {
+        background-color: #06c;
     }
 </style>

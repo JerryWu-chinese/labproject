@@ -7,6 +7,7 @@ import home from '../components/home.vue'
 import handle from '../components/handle.vue'
 import approved from '../components/approved.vue'
 import apply from '../components/apply.vue'
+import examine from '../components/examine.vue'
 
 Vue.use(VueRouter)
 

@@ -6,8 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         componentId: '',
-        count: 0,
-        index: -1,
+        examine: '',
         name: '',
         class: '',
         type1: false,
@@ -16,7 +15,6 @@ export default new Vuex.Store({
         apply_time: '',
         reason: '',
         veto_reason: '',
-        tableData: [],
         name2: '',
         id2: -1,
         apply_time2: '',
@@ -25,10 +23,8 @@ export default new Vuex.Store({
         type4: false,
         reason2: '',
         veto_reason2: '',
-        teacher: '',
         status1: -1,
-        status2: -1,
-        tableData2: []
+        status2: -1
     },
     mutations: {
         

@@ -1,13 +1,18 @@
 <template>
-  <el-table class="huaxia"
-    :data="tableData"
-    min-width="1516"
-    :max-height="maxHeight"
-    style="width: 100%">
-    <el-table-column
+  
+    <el-table
+      stripe
+      ref="table"
+      class="tableBox"
+      :data="tableData"
+      :row-style="{height:60+'px'}"
+      :cell-style="{height:60+'px',textAlign: 'center'}"
+      :header-cell-style="{height:60+'px',textAlign: 'center'}"
+      style="width: 100%;">
+      <el-table-column
       prop="name"
       label="姓名"
-      width="300">
+      width="120">
     </el-table-column>
     <el-table-column
       prop="account"
@@ -15,56 +20,58 @@
       width="350">
     </el-table-column>
     <el-table-column
-      fixed
       prop="create_at"
       label="申请时间"
-      width="200">
+      width="450">
     </el-table-column>
     <el-table-column
       prop="type"
       label="请假类型"
-      width="140">
+      width="240">
     </el-table-column>
-    <el-table-column
-      fixed="right"
-      label="操作"
-      width="200">
-      <template slot-scope="scope">
-        <el-button
-          @click.native.prevent="deleteRow(scope.$index, tableData)"
-          type="text"
-          size="small">
-          审核
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="120">
+        <template slot-scope="scope">
+          <el-button
+            @click.native.prevent="deleteRow(scope.$index, tableData)"
+            type="text"
+            size="small">
+            审核
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  
 </template>
 
 <script>
-
   export default {
     methods: {
-        //点击审核，显示组件，并给 Vuex 中数据赋值
-        deleteRow(index, rows) {
-            this.$emit('fhide');
-            this.$store.state.index = index;
-            this.$store.state.name = this.$store.state.tableData[index].name;
-            this.$store.state.class = this.$store.state.tableData[index].class;
-            if(this.tableData[index].type == "事假")
-            {
-                this.$store.state.type1 = true;
-                this.$store.state.type2 = false;
-            }
-            else
-            {
-                this.$store.state.type2 = true;
-                this.$store.state.type1 = false;
-            };
-            this.$store.state.id = this.$store.state.tableData[index].id;
-            this.$store.state.apply_time = this.$store.state.tableData[index].apply_time;
-            this.$store.state.reason = this.$store.state.tableData[index].reason;
-            this.$store.state.veto_reason = this.$store.state.tableData[index].veto_reason;
+      deleteRow(index, rows) {
+        /*rows.splice(index, 1);*/
+        this.$store.state.examine = 'examine';
+        this.$store.state.name = this.tableData[index].name;
+        this.$store.state.class = this.tableData[index].class;
+        if(this.tableData[index].type == "事假")
+        {
+            this.$store.state.type1 = true;
+            this.$store.state.type2 = false;
+        }
+        else
+        {
+            this.$store.state.type2 = true;
+            this.$store.state.type1 = false;
+        };
+        this.$store.state.id = this.tableData[index].id;
+        this.$store.state.apply_time = this.tableData[index].apply_time;
+        this.$store.state.reason = this.tableData[index].reason;
+      }
+    },
+    data() {
+      return {
+        tableData: []
       }
     },
     created: function () {
@@ -83,53 +90,13 @@
                     }
                 }
                 this.tableData = this.tableData.concat(value.data);
-                this.$store.state.tableData = this.$store.state.tableData.concat(value.data);
-                //console.log(this.tableData);
             }, reason => {
                 console.log(reason);
         })
     },
-    data() {
-      return {
-          tableData: [],
-          maxHeight: '822'
-      }
-    },
-    watch: {
-        screenWidth(val){
-            // 为了避免频繁触发resize函数导致页面卡顿，使用定时器
-            if(!this.timer){
-                // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
-                this.maxHeight = val
-                this.timer = true
-                let that = this
-                setTimeout(function(){
-                    // 打印screenWidth变化的值
-                    //console.log(that.maxHeight)
-                    that.timer = false
-                },400)
-            }
-        }
-    },
-    mounted () {undefined
-        const that = this
-        window.addEventListener('resize', function(e) {
-            //this.maxHeight = document.querySelector('.sihai').offsetHeight;
-            //console.log(document.querySelector('.sihai').offsetHeight);
-            window.screenWidth = document.querySelector('.sihai').offsetHeight
-            that.maxHeight = window.screenWidth
-        })
-    }
   }
 </script>
 
 <style scoped>
-    .huaxia {
-        /*position: absolute;
-        top: 275px;
-        right: 340px;
-        width: 50%!important;
-        border: 1px solid #000;*/
-        height: 100%;
-    }
+
 </style>
